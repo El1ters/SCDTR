@@ -97,12 +97,18 @@ void CommandList(){
 
       case 'd':
         {
-          float val = atof(item2) * DAC_RANGE;
-          if (val > 4096){
-            Serial.println("Invalid value");
+          int aux = atoi(item2);
+          if (aux < 1 || aux > 3){
+            Serial.println("err");
             return;
           }
-          counter = atof(item2) * DAC_RANGE;
+          float val = atof(item3) * DAC_RANGE;
+          if (val > 4096 || val < 0){
+            Serial.println("err");
+            return;
+          }
+          counter = atof(item3) * DAC_RANGE;
+          Serial.println("ack");
           break;
         }
       case 'g':
@@ -113,14 +119,15 @@ void CommandList(){
           } else if(strcmp(item2,"d") == 0){
             Serial.print("Current duty cycle: ");
             Serial.println(float(counter)/DAC_RANGE);
-            Serial.print("Current lux: ");
-            Serial.println(lux);
           } else if(strcmp(item2,"k") == 0){
             Serial.print("Feedback: ");
             Serial.println(_pid.get_feedback());
           } else if(strcmp(item2,"r") == 0){
             Serial.print("Reference: ");
             Serial.println(reference);
+          } else if(strcmp(item2,"l") == 0){
+            Serial.print("Lux: ");
+            LuxConverter();
           }
           break;
         }
